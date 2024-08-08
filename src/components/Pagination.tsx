@@ -25,12 +25,16 @@ export const Pagination = () => {
           onClick={prev}
           variant="text"
           className="flex items-center gap-3 capitalize text-affiliate-deep-blue text-sm"
+          onPointerEnterCapture={undefined}
+          onPointerLeaveCapture={undefined}
         >
           <ChevronLeftIcon strokeWidth={2} className="h-5 w-5" /> Previous
         </Button>
         <div className="flex items-center gap-2">
           {Array.from({ length: 2 }, (_, index) => (
             <IconButton
+              onPointerEnterCapture={undefined}
+              onPointerLeaveCapture={undefined}
               placeholder={""}
               key={index}
               className="text-affiliate-deep-blue flex items-center justify-center text-sm font-medium"
@@ -45,6 +49,8 @@ export const Pagination = () => {
           variant="text"
           className="flex items-center gap-3 capitalize text-affiliate-deep-blue text-sm"
           onClick={next}
+          onPointerEnterCapture={undefined}
+          onPointerLeaveCapture={undefined}
         >
           Next <ChevronRightIcon strokeWidth={2} className="h-5 w-5" />
         </Button>
