@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Gorditas:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Goritas';
+  src: url('./fonts/Roboto-Regular.ttf');
+}
+
+@layer {
+  * {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+  }
+
+  body {
+    @apply bg-[#F5F7FA];
+  }
+}
+
+@layer components {
+  .carousel-slide {
+    @apply bg-transparent overflow-hidden mx-auto flex flex-row gap-4 p-8 cursor-pointer;
+  }
+
+  .carousel-slider {
+    @apply relative block;
+    box-sizing: border-box;
+    -moz-user-select: none;
+    user-select: none;
+    touch-action: pan-y;
+  }
+
+  .carousel-slide-list {
+    @apply relative overflow-hidden m-0 p-0 block items-center;
+  }
+
+  .carousel-slide .carousel-slider-track,
+  .carousel-slide .carousel-slide-list {
+    -webkit-transform: translate3d(0px, 0px, 0px);
+    -moz-transform: translate3d(0px, 0px, 0px);
+    -ms-transform: translate3d(0px, 0px, 0px);
+    -o-transform: translate3d(0px, 0px, 0px);
+    transform: translate3d(0px, 0px, 0px);
+  }
+
+  .carousel-slider-track {
+    @apply m-auto relative top-0 overflow-hidden left-0 flex items-center;
+  }
+
+  .carousel-slider-track::before,
+  .carousel-slider-track::after {
+    content: '';
+    display: table;
+  }
+}
