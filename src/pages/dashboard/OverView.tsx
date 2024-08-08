@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import { Button } from "@material-tailwind/react";
 import chip from "@/assets/Chip_Card.png";
 import chipBlack from "@/assets/Chip_Card_b.png";
 import imgOne from "@/assets/img-01.jpg";
@@ -15,6 +14,7 @@ import {
   WeeklyActivity,
   WeeklyActivityDesktop,
 } from "@/components/icons/Icons";
+import { Button } from "@material-tailwind/react";
 
 export const OverView = () => {
   const [width, setWidth] = useState<number>(0);
@@ -38,9 +38,11 @@ export const OverView = () => {
               My Cards
             </h3>
             <Button
-              className="text-base px-2 py-1.5 font-semibold text-affiliate-blue capitalize lg:text-lg"
-              placeholder="see-all-btn"
               variant="text"
+              className="text-base px-2 py-1.5 font-semibold text-affiliate-blue capitalize lg:text-lg"
+              placeholder={undefined}
+              onPointerEnterCapture={undefined}
+              onPointerLeaveCapture={undefined}
             >
               See All
             </Button>

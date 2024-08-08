@@ -144,6 +144,8 @@ export const Transactions = () => {
                   className:
                     "!bg-transparent !border-b-2 !shadow-none !border-gray-900 !rounded-t-md",
                 }}
+                onPointerEnterCapture={undefined}
+                onPointerLeaveCapture={undefined}
               >
                 <Tab
                   placeholder={"all"}
@@ -155,6 +157,8 @@ export const Transactions = () => {
                       : "text-[#8BA3CB]",
                     "text-xs px-0 py-2 capitalize",
                   )}
+                  onPointerEnterCapture={undefined}
+                  onPointerLeaveCapture={undefined}
                 >
                   all transactions
                 </Tab>
@@ -169,6 +173,8 @@ export const Transactions = () => {
                       : "text-[#8BA3CB]",
                     "text-xs px-0 py-2 capitalize",
                   )}
+                  onPointerEnterCapture={undefined}
+                  onPointerLeaveCapture={undefined}
                 >
                   income
                 </Tab>
@@ -183,11 +189,18 @@ export const Transactions = () => {
                       : "text-[#8BA3CB]",
                     "text-xs px-0 py-2 capitalize",
                   )}
+                  onPointerEnterCapture={undefined}
+                  onPointerLeaveCapture={undefined}
                 >
                   expense
                 </Tab>
               </TabsHeader>
-              <TabsBody placeholder="tab body" className="p-0 bg-transparent">
+              <TabsBody
+                placeholder="tab body"
+                className="p-0 bg-transparent"
+                onPointerEnterCapture={undefined}
+                onPointerLeaveCapture={undefined}
+              >
                 <TabPanel value={"all"} className="p-0 bg-transparent">
                   <ul className="bg-white p-5 rounded-2xl shadow mt-4">
                     <li className="flex items-center justify-between border-b py-3.5">
