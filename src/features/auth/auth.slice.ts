@@ -1,66 +1,17 @@
-import {
-  login_user,
-  register_new_user,
-  logout_user,
-  forgot_password,
-  verify_email,
-} from "@/api/axios.config";
-import {
-  InitialState,
-  RegisterPayloadAction,
-  LoginPayloadAction,
-  ForgotPayloadAction,
-  VerifyEmailPayloadAction,
-} from "@/types/auth/auth";
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
+import { InitialState, Token, User } from "@/types/auth/auth";
+import { forgot, login, logout, register, verifyEmail } from "../thunks/auth.thunk";
 
 const initialState: InitialState = {
-  isLoading: false,
-  user: null!,
-  tokens: null!,
-  data: {},
+  loading: "idle",
+  data: {
+    tokens: {} as Token,
+    user: {} as User,
+  },
+  requestedId: undefined,
+  error: null,
 };
-
-export const register = createAsyncThunk(
-  "auth/register",
-  async (data: RegisterPayloadAction) => {
-    const response = await register_new_user(data);
-
-    console.log(response.data);
-    return response.data;
-  },
-);
-
-export const login = createAsyncThunk(
-  "auth/login",
-  async (data: LoginPayloadAction) => {
-    const response = await login_user(data);
-
-    return response.data;
-  },
-);
-
-export const logout = createAsyncThunk("auth/logout", async () => {
-  const response = await logout_user();
-  return response.data;
-});
-
-export const forgot = createAsyncThunk(
-  "auth/forgot",
-  async (data: ForgotPayloadAction) => {
-    const response = await forgot_password(data);
-    return response.data;
-  },
-);
-
-export const verifyEmail = createAsyncThunk(
-  "auth/verify-email",
-  async (data: VerifyEmailPayloadAction) => {
-    const response = await verify_email(data);
-    return response.data;
-  },
-);
 
 const authSlice = createSlice({
   name: "auth",
@@ -71,18 +22,25 @@ const authSlice = createSlice({
      * Register builder casing
      */
     builder
-      .addCase(register.pending, (state) => {
-        state.isLoading = true;
+      .addCase(register.pending, (state, action) => {
+        if (state.loading === "idle") {
+          state.loading = "pending";
+          state.requestedId = action.meta.requestId;
+        }
       })
       .addCase(register.fulfilled, (state, action) => {
-        state.user = action.payload.user;
-        state.data = action.payload;
-        state.isLoading = false;
-
-        toast.success(state.data.message);
+        if (state.loading === "pending" && state.requestedId === action.meta.requestId) {
+          state.loading = "succeeded";
+          state.requestedId = undefined;
+          toast.success(action.payload.data.message);
+        }
       })
-      .addCase(register.rejected, (_, action) => {
-        toast.error(action.error.message);
+      .addCase(register.rejected, (state, action) => {
+        if (action.payload) {
+          state.error = action.payload as any;
+        } else {
+          state.error = action.error as any;
+        }
       });
 
     /**
@@ -90,20 +48,18 @@ const authSlice = createSlice({
      */
     builder
       .addCase(login.pending, (state) => {
-        state.isLoading = true;
+        state.loading = "pending";
       })
       .addCase(login.fulfilled, (state, action) => {
-        state.user = action.payload.user;
-        state.tokens = action.payload.tokens;
-        state.data = null;
-        state.isLoading = false;
+        const { data } = action.payload;
 
-        toast.success(state.data.message);
+        state.data.user = data.user;
+        state.data.tokens = data.tokens;
+
+        state.loading = "succeeded";
       })
-      .addCase(login.rejected, (state, action) => {
-        state.isLoading = false;
-        
-        toast.error(action.error.message);
+      .addCase(login.rejected, (state) => {
+        state.loading = "failed";
       });
 
     /**
@@ -111,20 +67,18 @@ const authSlice = createSlice({
      */
     builder
       .addCase(logout.pending, (state) => {
-        state.isLoading = true;
+        state.loading = "pending";
       })
-      .addCase(logout.fulfilled, (state,{payload}) => {
-        state.isLoading = false;
+      .addCase(logout.fulfilled, (state, { payload }) => {
+        state.loading = "succeeded";
 
-        state.data = null;
-        state.user = null!;
-        state.tokens = null!;
+        state.data.user = null!;
+        state.data.tokens = null!;
 
         toast.success(payload.message);
       })
-      .addCase(logout.rejected, (state, action) => {
-        state.isLoading = false;
-        toast.error(action.error.message);
+      .addCase(logout.rejected, (state) => {
+        state.loading = "failed";
       });
 
     /**
@@ -132,17 +86,13 @@ const authSlice = createSlice({
      */
     builder
       .addCase(forgot.pending, (state) => {
-        state.isLoading = true;
+        state.loading = "pending";
       })
-      .addCase(forgot.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.data = action.payload;
-
-        toast.success(state.data.message);
+      .addCase(forgot.fulfilled, (state) => {
+        state.loading = "succeeded";
       })
-      .addCase(forgot.rejected, (state, action) => {
-        state.isLoading = false;
-        toast.error(action.error.message);
+      .addCase(forgot.rejected, (state) => {
+        state.loading = "failed";
       });
 
     /**
@@ -151,18 +101,14 @@ const authSlice = createSlice({
 
     builder
       .addCase(verifyEmail.pending, (state) => {
-        state.isLoading = true;
+        state.loading = "pending";
       })
       .addCase(verifyEmail.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.user = action.payload;
-        state.data = action.payload;
-
-        toast.success(state.data.message);
+        state.loading = "succeeded";
+        state.data.user = action.payload;
       })
-      .addCase(verifyEmail.rejected, (state, action) => {
-        state.isLoading = false;
-        toast.error(action.error.message);
+      .addCase(verifyEmail.rejected, (state) => {
+        state.loading = "failed";
       });
   },
 });

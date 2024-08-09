@@ -10,28 +10,17 @@ import { Login } from "@/pages/login/login";
 import { Register } from "@/pages/register/register";
 import { Transactions } from "@/pages/transactions/Transactions";
 import { VerifyEmail } from "@/pages/verify/Verify";
-// import { UseAppSelector } from "@/app/hook";
-
-// const { user, tokens } = UseAppSelector((state) => state.auth);
+import { ProtectedRoute } from "@/components/Protected";
+import { PublicRoute } from "@/components/Public";
 
 export const router = createBrowserRouter([
-  // {
-  //   path: "/",
-  //   children: [
-  //     {
-  //       path: "/",
-  //       element:
-  //         tokens.accessToken && user ? (
-  //           <Navigate to="/" />
-  //         ) : (
-  //           <Navigate to="/auth/login" />
-  //         ),
-  //     },
-  //   ],
-  // },
   {
     path: "/",
-    element: <AppLayout />,
+    element: (
+      <ProtectedRoute>
+        <AppLayout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         index: true,
@@ -65,20 +54,36 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "register",
-        element: <Register />,
+        element: (
+          <PublicRoute>
+            <Register />
+          </PublicRoute>
+        ),
       },
 
       {
         path: "login",
-        element: <Login />,
+        element: (
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        ),
       },
       {
         path: "verify-email/:id/:token",
-        element: <VerifyEmail />,
+        element: (
+          <PublicRoute>
+            <VerifyEmail />
+          </PublicRoute>
+        ),
       },
       {
         path: "forgot-password",
-        element: <Forgot />,
+        element: (
+          <PublicRoute>
+            <Forgot />
+          </PublicRoute>
+        ),
       },
     ],
   },

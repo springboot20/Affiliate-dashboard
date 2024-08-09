@@ -2,11 +2,34 @@ export type ForgotPayloadAction = { email: string };
 
 export type VerifyEmailPayloadAction = { token: string; userId: string };
 
+export interface User {
+  _id: string;
+  email: string;
+  username: string;
+  isEmailVerified: boolean;
+  avatar?: {
+    url: string;
+    public_id: string;
+  };
+  updatedAt: string;
+  createdAt: string;
+  role: string;
+  login_type: string;
+}
+
+export interface ValidationError {
+  errorMessage: string;
+  field_errors: Record<string, string>;
+}
+
 export type InitialState = {
-  isLoading: boolean;
-  user: User;
-  data: any;
-  tokens: Token;
+  loading: "idle" | "pending" | "succeeded" | "failed";
+  data: {
+    user: User;
+    tokens: Token;
+  };
+  requestedId?: string;
+  error: null;
 };
 
 export type RegisterPayloadAction = {
@@ -16,21 +39,6 @@ export type RegisterPayloadAction = {
 };
 
 export type LoginPayloadAction = { email: string; password: string };
-
-export type User = {
-  _id: string;
-  username: string;
-  role: string;
-  email: string;
-  avatar: {
-    url: string;
-    public_id: string;
-  };
-  forgotPasswordTokenExpiry: Date;
-  forgotPasswordToken: string;
-  loginType: string;
-  isEmailVerified: boolean;
-};
 
 export type Token = {
   accessToken: string;

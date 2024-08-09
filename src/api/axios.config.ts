@@ -1,12 +1,10 @@
 import axios, { AxiosResponse, AxiosRequestConfig, AxiosInstance } from "axios";
 import { toast } from "react-toastify";
-import { UseAppSelector } from "@/app/hook";
-
-const { accessToken } = UseAppSelector((state) => state.auth.tokens);
-
 export const BankAppApiClient: AxiosInstance = axios.create({
-  baseURL:
-    import.meta.env.MODE === "production" ? "" : import.meta.env.VITE_BANK_API,
+  baseURL: "http://localhost:5010/api/v1",
+  // import.meta.env.MODE === "production"
+  //   ? import.meta.env.VITE_DEPLOYED_URL
+  //   : import.meta.env.VITE_LOCAL_BASE_URL,
   timeout: 12000,
   headers: {
     "Content-Type": "application/json",
@@ -26,18 +24,12 @@ export const BankAppService = async ({
       if (config.status.toString().startsWith("2")) {
         showSuccessNotification ? toast.success(config.data.message) : "";
       }
-
-      BankAppApiClient.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${accessToken}`;
-
       return config;
     },
     (error) => {
       if (axios.isAxiosError(error)) {
         const errorMsg = (error.response?.data as { error?: string })?.error;
-        const errorWithMsg = (error.response?.data as { message?: string })
-          ?.message;
+        const errorWithMsg = (error.response?.data as { message?: string })?.message;
 
         if (errorMsg) {
           toast.error(errorMsg);
@@ -57,11 +49,8 @@ export const BankAppService = async ({
   return BankAppApiClient({ ...options });
 };
 
-export const register_new_user = (data: {
-  username: string;
-  password: string;
-  email: string;
-}) => BankAppApiClient.post("/users/register", data);
+export const register_new_user = (data: { username: string; password: string; email: string }) =>
+  BankAppApiClient.post("/users/register", data);
 
 export const login_user = (data: { password: string; email: string }) =>
   BankAppApiClient.post("/users/login", data);
