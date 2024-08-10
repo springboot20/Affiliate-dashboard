@@ -9,9 +9,11 @@ import { Investments } from "@/pages/investments/Investments";
 import { Login } from "@/pages/login/login";
 import { Register } from "@/pages/register/register";
 import { Transactions } from "@/pages/transactions/Transactions";
-import { VerifyEmail } from "@/pages/verify/Verify";
+import { SendEmail } from "@/pages/verify/SendMail";
 import { ProtectedRoute } from "@/components/Protected";
 import { PublicRoute } from "@/components/Public";
+import { EmailVerification } from "@/pages/verify/EmailVerification";
+import { EmailSentMessage } from "@/pages/verify/EmailSent";
 
 export const router = createBrowserRouter([
   {
@@ -70,10 +72,26 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: "send-email",
+        element: (
+          <PublicRoute>
+            <SendEmail />
+          </PublicRoute>
+        ),
+      },
+      {
         path: "verify-email/:id/:token",
         element: (
           <PublicRoute>
-            <VerifyEmail />
+            <EmailVerification />
+          </PublicRoute>
+        ),
+      },
+      {
+        path: "email-sent-message",
+        element: (
+          <PublicRoute>
+            <EmailSentMessage />
           </PublicRoute>
         ),
       },

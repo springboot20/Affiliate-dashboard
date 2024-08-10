@@ -1,13 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import { InitialState, Token, User } from "@/types/auth/auth";
-import { forgot, login, logout, register, verifyEmail } from "../thunks/auth.thunk";
+import { forgot, login, logout, register } from "../thunks/auth.thunk";
+import { LocalStorage } from "@/utils";
 
 const initialState: InitialState = {
   loading: "idle",
   data: {
-    tokens: {} as Token,
-    user: {} as User,
+    tokens: LocalStorage.get("tokens") ?? ({} as Token),
+    user: LocalStorage.get("user") ?? ({} as User),
   },
   requestedId: undefined,
   error: null,
@@ -16,23 +17,28 @@ const initialState: InitialState = {
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    setCredentials: (_, action) => {
+      const { user } = action.payload;
+
+      LocalStorage.set("user", user);
+    },
+  },
   extraReducers: (builder) => {
     /**
      * Register builder casing
      */
     builder
-      .addCase(register.pending, (state, action) => {
+      .addCase(register.pending, (state, { meta }) => {
         if (state.loading === "idle") {
           state.loading = "pending";
-          state.requestedId = action.meta.requestId;
+          state.requestedId = meta.requestId;
         }
       })
-      .addCase(register.fulfilled, (state, action) => {
-        if (state.loading === "pending" && state.requestedId === action.meta.requestId) {
+      .addCase(register.fulfilled, (state, { meta }) => {
+        if (state.loading === "pending" && state.requestedId === meta.requestId) {
           state.loading = "succeeded";
           state.requestedId = undefined;
-          toast.success(action.payload.data.message);
         }
       })
       .addCase(register.rejected, (state, action) => {
@@ -47,30 +53,50 @@ const authSlice = createSlice({
      * Login builder casing
      */
     builder
-      .addCase(login.pending, (state) => {
-        state.loading = "pending";
+      .addCase(login.pending, (state, { meta }) => {
+        if (state.loading === "idle") {
+          state.loading = "pending";
+          state.requestedId = meta.requestId;
+        }
       })
-      .addCase(login.fulfilled, (state, action) => {
-        const { data } = action.payload;
+      .addCase(login.fulfilled, (state, { payload, meta }) => {
+        const { data } = payload;
+
+        if (state.loading === "pending" && state.requestedId === meta.requestId) {
+          state.loading = "succeeded";
+          state.requestedId = undefined;
+          state.error = null;
+        }
 
         state.data.user = data.user;
         state.data.tokens = data.tokens;
 
-        state.loading = "succeeded";
+        LocalStorage.set("user", data.user);
+        LocalStorage.set("tokens", data.tokens);
       })
-      .addCase(login.rejected, (state) => {
+      .addCase(login.rejected, (state, action) => {
         state.loading = "failed";
+        if (action.payload) {
+          state.error = action.payload as any;
+        } else {
+          state.error = action.error as any;
+        }
       });
 
     /**
      * logout builder casing
      */
     builder
-      .addCase(logout.pending, (state) => {
-        state.loading = "pending";
+      .addCase(logout.pending, (state, { meta }) => {
+        if (state.loading === "idle") {
+          state.loading = "pending";
+          state.requestedId = meta.requestId;
+        }
       })
-      .addCase(logout.fulfilled, (state, { payload }) => {
-        state.loading = "succeeded";
+      .addCase(logout.fulfilled, (state, { payload, meta }) => {
+        if (state.loading === "pending" && state.requestedId === meta.requestId) {
+          state.loading = "succeeded";
+        }
 
         state.data.user = null!;
         state.data.tokens = null!;
@@ -85,33 +111,22 @@ const authSlice = createSlice({
      * Forgot password builder case
      */
     builder
-      .addCase(forgot.pending, (state) => {
-        state.loading = "pending";
+      .addCase(forgot.pending, (state, { meta }) => {
+        if (state.loading === "idle") {
+          state.loading = "pending";
+          state.requestedId = meta.requestId;
+        }
       })
-      .addCase(forgot.fulfilled, (state) => {
-        state.loading = "succeeded";
+      .addCase(forgot.fulfilled, (state, { meta }) => {
+        if (state.loading === "pending" && state.requestedId === meta.requestId) {
+          state.loading = "succeeded";
+        }
       })
       .addCase(forgot.rejected, (state) => {
-        state.loading = "failed";
-      });
-
-    /**
-     * Verify email
-     */
-
-    builder
-      .addCase(verifyEmail.pending, (state) => {
-        state.loading = "pending";
-      })
-      .addCase(verifyEmail.fulfilled, (state, action) => {
-        state.loading = "succeeded";
-        state.data.user = action.payload;
-      })
-      .addCase(verifyEmail.rejected, (state) => {
         state.loading = "failed";
       });
   },
 });
 
 export const authReducer = authSlice.reducer;
-// export const {  } = authSlice.actions;
+export const { setCredentials } = authSlice.actions;

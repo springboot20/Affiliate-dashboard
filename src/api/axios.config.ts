@@ -5,7 +5,6 @@ export const BankAppApiClient: AxiosInstance = axios.create({
   // import.meta.env.MODE === "production"
   //   ? import.meta.env.VITE_DEPLOYED_URL
   //   : import.meta.env.VITE_LOCAL_BASE_URL,
-  timeout: 12000,
   headers: {
     "Content-Type": "application/json",
   },
@@ -60,5 +59,10 @@ export const logout_user = () => BankAppApiClient.post("/users/logout");
 export const forgot_password = (data: { email: string }) =>
   BankAppApiClient.post("/user/forgot-password", data);
 
-export const verify_email = (data: { userId: string; token: string }) =>
-  BankAppApiClient.get(`/users/verify-email/${data.userId}/${data.token}`);
+export const verify_email = (data: { userId: string; token: string }) => {
+  const { userId, token } = data;
+  return BankAppApiClient.get(`/users/verify-email/${userId}/${token}`);
+};
+
+export const send_email = (data: { email: string }) =>
+  BankAppApiClient.post(`/users/send-email`, data);

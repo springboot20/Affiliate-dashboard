@@ -1,9 +1,9 @@
 import { EyeIcon, EyeSlashIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@/app/hook";
 import { login } from "@/features/thunks/auth.thunk";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import { loginSchema } from "@/schema/auth/login";
 import { LoginState } from "@/types/formik/formik";
 import { CustomErrorMessage } from "@/components/Error";
@@ -19,11 +19,20 @@ let initialValues: LoginState = {
 export const Login = () => {
   const dispatch = useAppDispatch();
   const [show, setShow] = useState<boolean>(false);
+  const navigate = useNavigate();
 
-  async function onSubmit(values: LoginState) {
+  async function onSubmit(values: LoginState, { resetForm }: FormikHelpers<LoginState>) {
     dispatch(login(values))
       .unwrap()
-      .then((response) => response)
+      .then(async (response) => {
+        await Promise.resolve(
+          setTimeout(() => {
+            navigate("/");
+            resetForm();
+          }),
+        );
+        return response;
+      })
       .catch((error) => {
         toast.error(`${error.name}: ${error.message}`);
       });

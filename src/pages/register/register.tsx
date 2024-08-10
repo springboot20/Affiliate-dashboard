@@ -1,11 +1,11 @@
 import { EyeIcon, EyeSlashIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { classNames } from "../../utils";
 import { register } from "@/features/thunks/auth.thunk";
 import { useAppDispatch } from "@/app/hook";
 
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import { RegisterState } from "@/types/formik/formik";
 import { registerSchema } from "@/schema/auth/register";
 import { toast } from "react-toastify";
@@ -20,20 +20,29 @@ const initialValues: RegisterState = {
 export const Register = () => {
   const dispatch = useAppDispatch();
   const [show, setShow] = useState<boolean>(false);
+  const navigate = useNavigate();
 
-  const onSubmit = async (values: RegisterState) => {
+  const onSubmit = async (values: RegisterState, { resetForm }: FormikHelpers<RegisterState>) => {
     dispatch(register(values))
       .unwrap()
-      .then((res) => res)
+      .then(async (res) => {
+        await Promise.resolve(
+          setTimeout(() => {
+            navigate("/auth/login");
+            resetForm();
+          }, 2000),
+        );
+        return res;
+      })
       .catch((error) => {
-        toast.error(`${error.name}: ${error.message}`);
+        toast.error(error.message);
       });
   };
 
   return (
     <>
       <div className="flex flex-col justify-center items-center min-h-screen p-3">
-        <div className="mx-auto  max-w-md">
+        <div className="mx-auto max-w-md">
           <UserCircleIcon className="mx-auto h-12 w-auto text-indigo-600" />
           <h2 className="mt-2 text-3xl text-center font-semibold text-gray-600">
             Sign up to create an account
@@ -158,7 +167,9 @@ export const Register = () => {
                     <span className="animation3 mx-[0.5px] h-2 w-2 bg-zinc-300 rounded-full"></span>
                   </div>
                 ) : (
-                  <span className=" text-white text-sm font-medium uppercase tracking-wider">sign up</span>
+                  <span className=" text-white text-sm font-medium uppercase tracking-wider">
+                    sign up
+                  </span>
                 )}
               </button>
             </Form>
