@@ -1,7 +1,7 @@
 import { EyeIcon, EyeSlashIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAppDispatch } from "@/app/hook";
+import { useAppDispatch, useAppSelector } from "@/app/hook";
 import { login } from "@/features/thunks/auth.thunk";
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import { loginSchema } from "@/schema/auth/login";
@@ -20,6 +20,9 @@ export const Login = () => {
   const dispatch = useAppDispatch();
   const [show, setShow] = useState<boolean>(false);
   const navigate = useNavigate();
+
+  const { data } = useAppSelector((state) => state.auth);
+  console.log(data);
 
   async function onSubmit(values: LoginState, { resetForm }: FormikHelpers<LoginState>) {
     dispatch(login(values))
