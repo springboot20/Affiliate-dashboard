@@ -26,7 +26,6 @@ export const Register = () => {
       .unwrap()
       .then((res) => res)
       .catch((error) => {
-        console.log()
         toast.error(`${error.name}: ${error.message}`);
       });
   };
@@ -40,8 +39,13 @@ export const Register = () => {
             Sign up to create an account
           </h2>
         </div>
-        <Formik initialValues={initialValues} validationSchema={registerSchema} onSubmit={onSubmit}>
-          {({ errors, touched }) => (
+        <Formik
+          validateOnMount
+          initialValues={initialValues}
+          validationSchema={registerSchema}
+          onSubmit={onSubmit}
+        >
+          {({ errors, touched, isValid, isSubmitting }) => (
             <Form className="mt-10 bg-white rounded-lg p-4 sm:p-6 max-w-xl w-full">
               <fieldset>
                 <div className="flex items-center justify-between">
@@ -139,10 +143,23 @@ export const Register = () => {
               </fieldset>
 
               <button
+                disabled={!isValid}
                 type="submit"
-                className="block py-2.5 w-full mt-5 bg-indigo-500 text-white text-sm font-medium rounded-md transform hover:-translate-y-1.5 transition shadow-md"
+                className="disabled:bg-indigo-300 disabled:translate-y-0 disabled:cursor-not-allowed block py-2.5 w-full mt-5 bg-indigo-500 rounded-md transform hover:-translate-y-1.5 transition shadow-md"
               >
-                Sign up
+                {isSubmitting ? (
+                  <div
+                    className={classNames(
+                      "p-5 rounded-3xl bg-secondary w-fit inline-flex gap-1.5 bg-black/60",
+                    )}
+                  >
+                    <span className="animation1 mx-[0.5px] h-2 w-2 bg-zinc-300 rounded-full"></span>
+                    <span className="animation2 mx-[0.5px] h-2 w-2 bg-zinc-300 rounded-full"></span>
+                    <span className="animation3 mx-[0.5px] h-2 w-2 bg-zinc-300 rounded-full"></span>
+                  </div>
+                ) : (
+                  <span className=" text-white text-sm font-medium uppercase tracking-wider">sign up</span>
+                )}
               </button>
             </Form>
           )}
