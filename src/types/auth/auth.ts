@@ -24,6 +24,7 @@ export interface ValidationError {
 
 export type InitialState = {
   loading: "idle" | "pending" | "succeeded" | "failed";
+  isAuthenticated:boolean
   data: {
     user: User;
     tokens: Token;

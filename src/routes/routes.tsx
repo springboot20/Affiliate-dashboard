@@ -14,15 +14,12 @@ import { ProtectedRoute } from "@/components/Protected";
 import { PublicRoute } from "@/components/Public";
 import { EmailVerification } from "@/pages/verify/EmailVerification";
 import { EmailSentMessage } from "@/pages/verify/EmailSent";
+import { Settings } from "@/pages/settings/Settings";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <ProtectedRoute>
-        <AppLayout />
-      </ProtectedRoute>
-    ),
+    element: <AppLayout />,
     children: [
       {
         index: true,
@@ -31,22 +28,47 @@ export const router = createBrowserRouter([
 
       {
         path: "/transactions",
-        element: <Transactions />,
+        element: (
+          // <ProtectedRoute>
+            <Transactions />
+          // </ProtectedRoute> 
+        ),
       },
 
       {
         path: "/accounts",
-        element: <Accounts />,
+        element: (
+          <ProtectedRoute>
+            <Accounts />
+          </ProtectedRoute>
+        ),
       },
 
       {
         path: "/investments",
-        element: <Investments />,
+        element: (
+          <ProtectedRoute>
+            <Investments />
+          </ProtectedRoute>
+        ),
       },
 
       {
         path: "/credit-card",
-        element: <CreditCards />,
+        element: (
+          <ProtectedRoute>
+            <CreditCards />
+          </ProtectedRoute>
+        ),
+      },
+
+      {
+        path: "/settings",
+        element: (
+          <Settings />
+          // <ProtectedRoute>
+          // </ProtectedRoute>
+        ),
       },
     ],
   },
@@ -74,17 +96,17 @@ export const router = createBrowserRouter([
       {
         path: "send-email",
         element: (
-          <PublicRoute>
+          <ProtectedRoute>
             <SendEmail />
-          </PublicRoute>
+          </ProtectedRoute>
         ),
       },
       {
         path: "verify-email/:id/:token",
         element: (
-          <PublicRoute>
+          <ProtectedRoute>
             <EmailVerification />
-          </PublicRoute>
+          </ProtectedRoute>
         ),
       },
       {

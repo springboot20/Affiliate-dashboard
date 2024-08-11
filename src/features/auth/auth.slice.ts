@@ -11,6 +11,7 @@ const initialState: InitialState = {
     user: LocalStorage.get("user") ?? ({} as User),
   },
   requestedId: undefined,
+  isAuthenticated: false,
   error: null,
 };
 
@@ -68,14 +69,18 @@ const authSlice = createSlice({
           state.error = null;
         }
 
+        state.isAuthenticated = true;
         state.data.user = data.user;
         state.data.tokens = data.tokens;
 
         LocalStorage.set("user", data.user);
+        LocalStorage.set("authentified", state.isAuthenticated);
         LocalStorage.set("tokens", data.tokens);
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = "failed";
+        state.isAuthenticated = false;
+
         if (action.payload) {
           state.error = action.payload as any;
         } else {
@@ -93,18 +98,26 @@ const authSlice = createSlice({
           state.requestedId = meta.requestId;
         }
       })
-      .addCase(logout.fulfilled, (state, { payload, meta }) => {
+      .addCase(logout.fulfilled, (state, { meta }) => {
         if (state.loading === "pending" && state.requestedId === meta.requestId) {
           state.loading = "succeeded";
         }
 
         state.data.user = null!;
+        state.isAuthenticated = false;
         state.data.tokens = null!;
 
-        toast.success(payload.message);
+        LocalStorage.remove("user");
+        LocalStorage.remove("tokens");
+        LocalStorage.remove("authentified");
       })
-      .addCase(logout.rejected, (state) => {
+      .addCase(logout.rejected, (state, action) => {
         state.loading = "failed";
+        if (action.payload) {
+          state.error = action.payload as any;
+        } else {
+          state.error = action.error as any;
+        }
       });
 
     /**

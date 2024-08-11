@@ -1,4 +1,5 @@
 import axios, { AxiosResponse, AxiosRequestConfig, AxiosInstance } from "axios";
+
 import { toast } from "react-toastify";
 export const BankAppApiClient: AxiosInstance = axios.create({
   baseURL: "http://localhost:5010/api/v1",
@@ -23,6 +24,7 @@ export const BankAppService = async ({
       if (config.status.toString().startsWith("2")) {
         showSuccessNotification ? toast.success(config.data.message) : "";
       }
+
       return config;
     },
     (error) => {

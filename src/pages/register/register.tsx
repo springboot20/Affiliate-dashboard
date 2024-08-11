@@ -135,9 +135,9 @@ export const Register = () => {
                       onClick={() => setShow(!show)}
                     >
                       {show ? (
-                        <EyeSlashIcon className="h-6 w-6 cursor-pointer text-gray-700 stroke-[3]" />
+                        <EyeSlashIcon className="h-6 w-6 cursor-pointer text-gray-700" />
                       ) : (
-                        <EyeIcon className="h-6 w-6 cursor-pointer text-gray-500 stroke-[3]" />
+                        <EyeIcon className="h-6 w-6 cursor-pointer text-gray-500" />
                       )}
                     </button>
                   </div>

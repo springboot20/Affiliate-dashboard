@@ -1,7 +1,7 @@
 import { EyeIcon, EyeSlashIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "@/app/hook";
+import { useAppDispatch } from "@/app/hook";
 import { login } from "@/features/thunks/auth.thunk";
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import { loginSchema } from "@/schema/auth/login";
@@ -21,9 +21,6 @@ export const Login = () => {
   const [show, setShow] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const { data } = useAppSelector((state) => state.auth);
-  console.log(data);
-
   async function onSubmit(values: LoginState, { resetForm }: FormikHelpers<LoginState>) {
     dispatch(login(values))
       .unwrap()
@@ -37,14 +34,14 @@ export const Login = () => {
         return response;
       })
       .catch((error) => {
-        toast.error(`${error.name}: ${error.message}`);
+        toast.error(`${error.statusCode}: ${error.message}`);
       });
   }
 
   return (
     <>
       <div className="flex flex-col justify-center items-center min-h-screen p-3">
-        <div className="mx-auto w-full max-w-md">
+        <div className="mx-auto max-w-md">
           <UserCircleIcon className="mx-auto h-12 w-auto text-indigo-600" />
           <h2 className="mt-2 text-xl sm:text-2xl text-center font-semibold text-gray-700">
             Sign in to your account
