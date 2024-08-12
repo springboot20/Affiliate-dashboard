@@ -2,7 +2,8 @@ import axios, { AxiosResponse, AxiosRequestConfig, AxiosInstance } from "axios";
 
 import { toast } from "react-toastify";
 export const BankAppApiClient: AxiosInstance = axios.create({
-  baseURL: "http://localhost:5010/api/v1",
+  baseURL: "https://banking-api-kyiv.onrender.com/api/v1", 
+// "http://localhost:5010/api/v1",
   // import.meta.env.MODE === "production"
   //   ? import.meta.env.VITE_DEPLOYED_URL
   //   : import.meta.env.VITE_LOCAL_BASE_URL,
