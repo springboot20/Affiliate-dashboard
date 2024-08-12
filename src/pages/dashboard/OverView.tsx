@@ -29,7 +29,7 @@ export const OverView = () => {
   }, []);
 
   return (
-    <section className="px-2 xs:px-4 mt-[11rem] lg:mt-28 w-full">
+    <section className="px-2 xs:px-4 mt-[11rem] lg:mt-28 w-full xl:max-w-7xl xl:mx-auto">
       <div className="w-full grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-4">
         {/* Card section */}
         <div className="lg:col-span-2 xl:col-span-2">

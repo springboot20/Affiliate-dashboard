@@ -29,18 +29,18 @@ export const router = createBrowserRouter([
       {
         path: "/transactions",
         element: (
-          // <ProtectedRoute>
+          <ProtectedRoute>
             <Transactions />
-          // </ProtectedRoute> 
+          </ProtectedRoute>
         ),
       },
 
       {
         path: "/accounts",
         element: (
-          <ProtectedRoute>
-            <Accounts />
-          </ProtectedRoute>
+          <Accounts />
+          // <ProtectedRoute>
+          // </ProtectedRoute>
         ),
       },
 
@@ -65,9 +65,9 @@ export const router = createBrowserRouter([
       {
         path: "/settings",
         element: (
-          <Settings />
-          // <ProtectedRoute>
-          // </ProtectedRoute>
+          <ProtectedRoute>
+            <Settings />
+          </ProtectedRoute>
         ),
       },
     ],

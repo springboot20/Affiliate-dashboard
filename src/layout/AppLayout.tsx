@@ -59,9 +59,9 @@ const AppLayout = () => {
       {({ open, close }) => (
         <div className="relative z-10 w-full flex lg:justify-between items-stretch h-screen">
           <SideNavigation open={open} close={close} />
-          <main className="absolute w-full left-0 lg:w-[calc(100%-17rem)] lg:left-[17rem] min-h-screen right-0">
+          <main className="absolute w-full left-0 lg:w-[calc(100%-17rem)] lg:left-[17rem] xl:w-[calc(100%-28rem)] xl:left-[28rem] min-h-screen right-0">
             <div className="w-full relative flex flex-col justify-between h-full">
-              <nav className="top-0 left-0 right-0 fixed bg-white lg:left-[17rem] border-b z-10">
+              <nav className="top-0 left-0 right-0 fixed bg-white lg:left-[17rem] xl:left-[28rem] border-b z-10">
                 <div className="mx-auto px-4 sm:px-2 md:px-4 flex flex-col items-center">
                   <div className="flex items-center justify-between w-full h-24">
                     <div className="flex items-center lg:hidden">

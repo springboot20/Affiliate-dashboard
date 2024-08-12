@@ -33,7 +33,7 @@ export const Transactions = () => {
     }
   }, []);
   return (
-    <section className="px-2 mt-[11rem] lg:mt-32 lg:px-8 w-full">
+    <section className="px-2 mt-[11rem] lg:mt-32 lg:px-8 w-full xl:max-w-7xl xl:mx-auto">
       <div className="w-full">
         {/* Card section */}
         <div>

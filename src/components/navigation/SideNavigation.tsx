@@ -65,7 +65,7 @@ export const SideNavigation: React.FC<{
     <nav className="z-20">
       <>
         <div
-          className={`hidden lg:flex fixed left-0 top-0 min-h-screen bg-white w-[17rem] border-r-2 flex-col items-center`}
+          className={`hidden lg:flex fixed left-0 top-0 min-h-screen bg-white w-[17rem] xl:w-[28rem] border-r-2 flex-col items-center`}
         >
           <div className="flex flex-col items-center h-full w-full">
             <div className="p-4 h-32 flex w-full items-center justify-start">
