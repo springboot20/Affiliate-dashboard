@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-export let passwordRule = /^(?=.*[a-z])(?=.*\d)[a-zA-Z\d]{6,}$/;
+export let passwordRule = /^(?=.*[a-z])(?=.*\d)(?=.[A-Z])(?=.[a-zA-Z\d])(?=.[@_&]).{6,}$/;
 
 export const loginSchema = yup.object({
   email: yup.string().email("Invalid email format entered").required("email is required"),

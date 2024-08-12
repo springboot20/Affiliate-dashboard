@@ -28,7 +28,7 @@ export const Register = () => {
       .then(async (res) => {
         await Promise.resolve(
           setTimeout(() => {
-            navigate("/auth/login");
+            navigate("/auth/send-mail");
             resetForm();
           }, 2000),
         );
