@@ -20,7 +20,7 @@ const App: React.FC = () => {
       }
     };
 
-    // setAuthorizationHeader();
+    setAuthorizationHeader();
   }, []);
 
   return <RouterProvider router={router} />;

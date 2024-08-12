@@ -11,7 +11,7 @@ const initialState: InitialState = {
     user: LocalStorage.get("user") ?? ({} as User),
   },
   requestedId: undefined,
-  isAuthenticated: false,
+  isAuthenticated: LocalStorage.get("authentified") as boolean,
   error: null,
 };
 
@@ -77,7 +77,7 @@ const authSlice = createSlice({
         state.data.tokens = data.tokens;
 
         LocalStorage.set("user", data.user);
-        LocalStorage.set("authentified", state.isAuthenticated);
+        LocalStorage.set("authentified", payload.isAuthenticated);
         LocalStorage.set("tokens", data.tokens);
       })
       .addCase(login.rejected, (state, action) => {

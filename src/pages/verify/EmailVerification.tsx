@@ -7,7 +7,6 @@ import { EmailVerificationSuccessMessage } from "./messages/Success";
 
 export const EmailVerification = () => {
   const { id, token } = useParams();
-  const [data, setData] = useState(null);
   const [status, setStatus] = useState<"success" | "failed" | "">("");
 
   useEffect(() => {
@@ -16,13 +15,10 @@ export const EmailVerification = () => {
         const { data } = await verify_email({ userId: id!, token: token! });
 
         toast.success(data.message, { autoClose: 2000 });
-
-        setData(data);
         setStatus("success");
       } catch (error) {
         if (error instanceof AxiosError) {
           const { message } = error.response?.data;
-          setData(data);
           toast.error(message, { autoClose: 2000 });
         }
       }
@@ -31,10 +27,6 @@ export const EmailVerification = () => {
   }, []);
 
   if (status === "success") {
-    return <EmailVerificationSuccessMessage data={data} />;
+    return <EmailVerificationSuccessMessage />;
   } else return null;
 };
-
-
-
-
