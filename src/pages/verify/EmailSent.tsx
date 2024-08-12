@@ -1,8 +1,14 @@
+import { useAppSelector } from "@/app/hook";
 import sentMail from "@/assets/image-sent.png";
 import { useNavigate } from "react-router-dom";
 
 export const EmailSentMessage = () => {
   const navigate = useNavigate();
+
+  const {
+    user: { email },
+  } = useAppSelector((state) => state.auth.data);
+
   return (
     <div className="h-screen flex items-center justify-center">
       <div className="flex items-center flex-col max-w-xl bg-white p-6 shadow-sm rounded-2xl border">
@@ -14,7 +20,7 @@ export const EmailSentMessage = () => {
           <div className="space-y-6">
             <h2 className="text-2xl text-gray-800 font-semibold">Please verify your email</h2>
             <p className="text-xl font-medium text-gray-700">
-              You're almost there! We sent an email to {}
+              You're almost there! We sent an email to <span className="text-base">{email}</span>
             </p>
           </div>
 

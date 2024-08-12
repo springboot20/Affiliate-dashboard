@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import { InitialState, Token, User } from "@/types/auth/auth";
-import { forgot, login, logout, register } from "../thunks/auth.thunk";
+import { forgot, login, logout, register, sendMail } from "../thunks/auth.thunk";
 import { LocalStorage } from "@/utils";
 
 const initialState: InitialState = {
@@ -23,6 +23,9 @@ const authSlice = createSlice({
       const { user } = action.payload;
 
       LocalStorage.set("user", user);
+    },
+    setUserEmail: (state, { payload }) => {
+      state.data.user = payload;
     },
   },
   extraReducers: (builder) => {
@@ -138,8 +141,30 @@ const authSlice = createSlice({
       .addCase(forgot.rejected, (state) => {
         state.loading = "failed";
       });
+
+    /**
+     * Forgot password builder case
+     */
+    builder
+      .addCase(sendMail.pending, (state, { meta }) => {
+        if (state.loading === "idle") {
+          state.loading = "pending";
+          state.requestedId = meta.requestId;
+        }
+      })
+      .addCase(sendMail.fulfilled, (state, { meta, payload }) => {
+        if (state.loading === "pending" && state.requestedId === meta.requestId) {
+          state.loading = "succeeded";
+        }
+
+        const { data } = payload;
+        state.data.user = data.user;
+      })
+      .addCase(sendMail.rejected, (state) => {
+        state.loading = "failed";
+      });
   },
 });
 
 export const authReducer = authSlice.reducer;
-export const { setCredentials } = authSlice.actions;
+export const { setCredentials, setUserEmail } = authSlice.actions;

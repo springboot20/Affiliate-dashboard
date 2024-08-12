@@ -77,7 +77,7 @@ export const forgot = createAsyncThunk(
 );
 
 export const sendMail = createAsyncThunk(
-  "auth/forgot",
+  "auth/send-mail",
   async (data: { email: string }, { rejectWithValue }) => {
     try {
       const response = await send_email(data);
@@ -91,7 +91,7 @@ export const sendMail = createAsyncThunk(
 );
 
 export const verifyMail = createAsyncThunk(
-  "auth/forgot",
+  "auth/verify-mail",
   async (data: { userId: string; token: string }, { rejectWithValue }) => {
     try {
       const response = await verify_email(data);

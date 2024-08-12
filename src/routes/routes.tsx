@@ -95,11 +95,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "send-email",
-        element: (
-          <ProtectedRoute>
-            <SendEmail />
-          </ProtectedRoute>
-        ),
+        element: <SendEmail />,
       },
       {
         path: "verify-email/:id/:token",

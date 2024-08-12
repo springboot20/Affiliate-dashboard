@@ -1,4 +1,3 @@
-import { send_email } from "@/api/axios.config";
 import { toast } from "react-toastify";
 import { classNames } from "@/utils";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
@@ -6,6 +5,9 @@ import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
 import * as yup from "yup";
 import { CustomErrorMessage } from "@/components/Error";
 import { useNavigate } from "react-router-dom";
+import { sendMail } from "@/features/thunks/auth.thunk";
+import { useAppDispatch } from "@/app/hook";
+import { setUserEmail } from "@/features/auth/auth.slice";
 
 const validationSchema = yup.object({
   email: yup.string().email("invalid email format").required("email is required"),
@@ -21,19 +23,24 @@ const initialValues: InitialValues = {
 
 export const SendEmail = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   async function onSubmit({ email }: InitialValues, { resetForm }: FormikHelpers<InitialValues>) {
-    try {
-      const { data } = await send_email({ email });
-      toast.success(data.message);
-
-      await Promise.resolve(setTimeout(() => resetForm(), 2000));
-      await Promise.resolve(setTimeout(() => navigate("/auth/email-sent-message"), 2000));
-    } catch (error) {
-      if (error instanceof Error) {
-      toast.error(error.message);
-      }
-    }
+    dispatch(sendMail({ email }))
+      .unwrap()
+      .then(async (res) => {
+        dispatch(setUserEmail({ email }));
+        await Promise.resolve(
+          setTimeout(() => {
+            navigate("/auth/email-sent-message");
+            resetForm();
+          }, 2000),
+        );
+        return res;
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
   }
 
   return (
