@@ -58,39 +58,41 @@ export const Settings = () => {
             </Tab>
           </TabList>
           <TabPanels>
-            <TabPanel
-              as={motion.div}
-              initial={{
-                left: 0,
-              }}
-              animate={{
-                left: "-100%",
-              }}
-            >
-              <Profile />
-            </TabPanel>
-            <TabPanel
-              as={motion.div}
-              initial={{
-                left: 0,
-              }}
-              animate={{
-                left: "-100%",
-              }}
-            >
-              <Preference />
-            </TabPanel>
-            <TabPanel
-              as={motion.div}
-              initial={{
-                left: 0,
-              }}
-              animate={{
-                left: "-100%",
-              }}
-            >
-              <Security />
-            </TabPanel>
+            <AnimatePresence initial={false}>
+              <TabPanel
+                as={motion.div}
+                initial={{
+                  left: 0,
+                }}
+                animate={{
+                  left: "-100%",
+                }}
+              >
+                <Profile />
+              </TabPanel>
+              <TabPanel
+                as={motion.div}
+                initial={{
+                  left: 0,
+                }}
+                animate={{
+                  left: "-100%",
+                }}
+              >
+                <Preference />
+              </TabPanel>
+              <TabPanel
+                as={motion.div}
+                initial={{
+                  left: 0,
+                }}
+                animate={{
+                  left: "-100%",
+                }}
+              >
+                <Security />
+              </TabPanel>
+            </AnimatePresence>
           </TabPanels>
         </TabGroup>
       </div>
