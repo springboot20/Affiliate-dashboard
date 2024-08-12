@@ -48,7 +48,7 @@ export const Login = () => {
           </h2>
         </div>
         <Formik initialValues={initialValues} validationSchema={loginSchema} onSubmit={onSubmit}>
-          {({ errors, touched, isValid, isSubmitting, dirty }) => {
+          {({ errors, touched, isValid, isSubmitting }) => {
             console.log(isSubmitting);
             return (
               <Form className="mt-10 w-full bg-white rounded-lg p-6 max-w-xl">
@@ -149,14 +149,14 @@ export const Login = () => {
                 </div>
                 <button
                   type="submit"
-                  disabled={!(dirty && isValid)}
-                  className="disabled:bg-indigo-300 disabled:translate-y-0 disabled:cursor-not-allowed block w-full mt-3 py-2.5 bg-indigo-500 text-white text-sm sm:text-base font-semibold rounded-md transform hover:-translate-y-1.5 transition shadow-md hover:bg-indigo-400 active:bg-indigo-500 focus:outline-none tracking-wider sm:mt-4 md:py-2.5"
+                  disabled={!isValid}
+                  className="disabled:bg-indigo-300 disabled:translate-y-0 disabled:cursor-not-allowed block py-2.5 w-full mt-5 bg-indigo-500 rounded-md transform hover:-translate-y-1.5 transition shadow-md"
                   style={{ textTransform: "uppercase" }}
                 >
-                  {dirty && isValid ? (
-                    <span className="text-sm uppercase tracking-wider">sign in</span>
-                  ) : (
+                  {isSubmitting ? (
                     <Loader />
+                  ) : (
+                    <span className="text-white text-sm font-medium uppercase tracking-wider">sign in</span>
                   )}
                 </button>
               </Form>

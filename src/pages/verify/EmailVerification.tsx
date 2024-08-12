@@ -14,12 +14,16 @@ export const EmailVerification = () => {
       try {
         const { data } = await verify_email({ userId: id!, token: token! });
 
-        toast.success(data.message, { autoClose: 2000 });
         setStatus("success");
+        toast.success(data.message, { autoClose: 2000 });
       } catch (error) {
-        if (error instanceof AxiosError) {
-          const { message } = error.response?.data;
-          toast.error(message, { autoClose: 2000 });
+        if (status !== "success") {
+          // Only show error if status is not already "success"
+          setStatus("failed");
+          if (error instanceof AxiosError) {
+            const { message } = error.response?.data;
+            toast.error(message, { autoClose: 2000 });
+          }
         }
       }
     };

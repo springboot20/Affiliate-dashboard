@@ -167,7 +167,7 @@ export const Register = () => {
                     <span className="animation3 mx-[0.5px] h-2 w-2 bg-zinc-300 rounded-full"></span>
                   </div>
                 ) : (
-                  <span className=" text-white text-sm font-medium uppercase tracking-wider">
+                  <span className="text-white text-sm font-medium uppercase tracking-wider">
                     sign up
                   </span>
                 )}

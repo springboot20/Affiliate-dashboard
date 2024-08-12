@@ -6,11 +6,11 @@ export const EmailVerificationSuccessMessage: React.FC = () => {
   return (
     <div className="flex h-screen items-center justify-center">
       <div className="flex items-center flex-col max-w-xl text-center bg-white p-6 shadow-sm rounded-2xl border">
-        <h1 className="text-xl font-semibold text-gray-800">account verified</h1>
+        <h1 className="text-xl font-semibold text-gray-800 capitalize">account verified</h1>
 
         <div>
           <span className="flex items-center justify-center">
-            <EnvelopeIcon className="h-20 fill-green-600" aria-hidden={true} />
+            <EnvelopeIcon className="h-20 fill-green-600 stroke-white" aria-hidden={true} />
           </span>
         </div>
 
